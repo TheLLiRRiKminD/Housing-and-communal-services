@@ -28,7 +28,10 @@ def calculate_payment(apartment, water_tariff, maintenance_tariff, month):
 
     for meter in apartment.water_meters.all():
         if month in meter.readings and last_month in meter.readings:
-            water_usage += meter.readings[month] - meter.readings[last_month]
+            current_reading = meter.readings[month]
+            last_reading = meter.readings[last_month]
+            usage = current_reading - last_reading
+            water_usage += usage
 
     water_cost = water_usage * water_tariff.price_per_unit
     maintenance_cost = apartment.area * maintenance_tariff.price_per_unit

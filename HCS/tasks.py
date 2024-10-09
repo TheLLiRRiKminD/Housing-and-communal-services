@@ -20,4 +20,7 @@ def calculate_all_payments(house_id, month):
         apartment.last_payment_month = month
         apartment.save()
 
+        # Отладочные сообщения
+        print(f"Apartment ID: {apartment.id}, Month: {month}, Payment: {payment}")
+
     return 'Completed'
