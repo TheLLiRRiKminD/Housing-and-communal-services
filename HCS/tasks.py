@@ -5,11 +5,13 @@ from .utils import calculate_payment
 
 @shared_task
 def calculate_all_payments(house_id, month):
-    house = House.objects.get(id=house_id)
+    house = House.objects.select_related('apartments').get(id=house_id)
     water_tariff = Tariff.objects.get(name='water')
     maintenance_tariff = Tariff.objects.get(name='maintenance')
 
-    for apartment in house.apartments.all():
+    apartments = house.apartments.prefetch_related('water_meters')
+
+    for apartment in apartments:
         payment = calculate_payment(apartment, water_tariff, maintenance_tariff, month)
 
         # Сохранение результата в PaymentRecord

@@ -12,10 +12,11 @@ class Tariff(models.Model):
 
 class House(models.Model):
     """Модель дома"""
-    address = models.CharField(max_length=255)
+    street = models.CharField(max_length=255)
+    house_number = models.IntegerField(default=1)
 
     def __str__(self):
-        return self.address
+        return f'{self.street}, {self.house_number}'
 
 
 class Apartment(models.Model):
@@ -27,7 +28,7 @@ class Apartment(models.Model):
     last_payment_month = models.CharField(max_length=7, null=True, blank=True)  # Формат YYYY-MM
 
     def __str__(self):
-        return f"Apartment in {self.house.address}"
+        return f"Apartment in {self.house.street} {self.house.house_number}"
 
 
 class WaterMeter(models.Model):

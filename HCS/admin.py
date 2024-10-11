@@ -9,7 +9,7 @@ class HCSAdmin(admin.ModelAdmin):
 
 @admin.register(House)
 class HCSAdmin(admin.ModelAdmin):
-    list_display = ('address',)
+    list_display = ('street', 'house_number')
 
 @admin.register(Apartment)
 class HCSAdmin(admin.ModelAdmin):

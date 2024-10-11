@@ -1,4 +1,11 @@
 import datetime
+from rest_framework.exceptions import ValidationError
+
+
+def validate_readings(meter, month, last_month):
+    if month not in meter.readings or last_month not in meter.readings:
+        raise ValidationError(
+            f"Missing readings for Meter ID: {meter.id} for Month: {month} or Last Month: {last_month}")
 
 
 def get_previous_month(month):
@@ -27,11 +34,15 @@ def calculate_payment(apartment, water_tariff, maintenance_tariff, month):
     water_usage = 0
 
     for meter in apartment.water_meters.all():
-        if month in meter.readings and last_month in meter.readings:
+        try:
+            validate_readings(meter, month, last_month)
             current_reading = meter.readings[month]
             last_reading = meter.readings[last_month]
             usage = current_reading - last_reading
             water_usage += usage
+
+        except ValidationError as e:
+            print(e)
 
     water_cost = water_usage * water_tariff.price_per_unit
     maintenance_cost = apartment.area * maintenance_tariff.price_per_unit
